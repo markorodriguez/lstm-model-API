@@ -11,5 +11,6 @@ def index():
 @app.post('/api/trained-model')
 def trained_model():
     body = request.get_json()
+    print(body['text'])
     predict_text(body['text'])
       

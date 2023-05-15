@@ -9,6 +9,9 @@ import os
 from src.service.balance_df import generate_balaced_dataset
 from src.service.df_to_dataset import df_to_dataset
 
+custom_encoder = tf.keras.layers.TextVectorization(max_tokens=2000)
+
+
 def train_model():
     
     global df_balanced
@@ -30,7 +33,7 @@ def train_model():
 
     encoder = tf.keras.layers.TextVectorization(max_tokens=2000)
     encoder.adapt(train_data.map(lambda text, label:text))
-    # vocab = np.array(encoder.get_vocabulary())
+    vocab = np.array(encoder.get_vocabulary())
 
     modelLSTM = tf.keras.Sequential([
     encoder,
@@ -55,16 +58,26 @@ def train_model():
 
     modelLSTM.fit(train_data, epochs=5, validation_data=valid_data)
     
-    modelLSTM.save('src/model/model.h5')
+    modelLSTM.save('src/model/model.keras', save_format="keras")
 
 def use_model():
     global model
 
+    model_list = os.listdir('src/models')
+
+    if len(model_list) == 0:
+        train_model()
+        model = tf.keras.models.load_model('src/models/model.keras' )
+    else:
+        model = tf.keras.models.load_model('src/models/model.keras')
+
+    """
     try:
-        model = tf.keras.models.load_model('src/model/model.h5')
+        model = tf.keras.models.load_model('src/models/model.h5')
     except:
         print('No existe un modelo entrenado, se entrenará uno')
         train_model()
-        model = tf.keras.models.load_model('src/model/model.h5')
-    
+        model = tf.keras.models.load_model('src/models/model.h5')
+    """
+
     return model

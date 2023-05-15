@@ -7,21 +7,21 @@ def predict_text(text):
     if prediction[0] > 0.5:
         #print('Positivo')
         
-        """
+        
         return {
             'classification': 'Positivo',
             'score': float(prediction[0])
         }
-        """
+        
     else:
         
         #print('Negativo')
         
-        """
+    
         return {
             'classification': 'Negativo',
             'score': float(prediction[0])
         }
-        """
+        
 
-predict_text('No me llamen más, no quiero saber nada de ustedes')
+# predict_text('No me llamen más, no quiero saber nada de ustedes')
